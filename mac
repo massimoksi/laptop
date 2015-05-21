@@ -87,19 +87,10 @@ fancy_echo "Updating Homebrew formulas ..."
 brew update
 
 brew_install_or_upgrade 'git'
-brew_install_or_upgrade 'git-flow'
-brew_install_or_upgrade 'hub'
-brew_install_or_upgrade 'git-extras'
 brew_install_or_upgrade 'bash-completion'
 brew_install_or_upgrade 'rbenv'
 brew_install_or_upgrade 'ruby-build'
-brew_install_or_upgrade 'carthage'
-brew_install_or_upgrade 'cloc'
-brew_install_or_upgrade 'uncrustify'
-brew_install_or_upgrade 'ffmpeg'
 brew_tap 'homebrew/services'
-
-brew cleanup -s
 
 ###############################################################################
 # Rbenv
@@ -118,9 +109,7 @@ rbenv shell "$ruby_version"
 
 gem update --system
 
-gem_install_or_update 'cocoapods'
 gem_install_or_update 'bundler'
-gem_install_or_update 'jazzy'
 
 fancy_echo "Configuring Bundler ..."
 number_of_cores=$(sysctl -n hw.ncpu)
