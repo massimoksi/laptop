@@ -60,7 +60,7 @@ This repo already contains a `.laptop.local` you can use to get started.
 Download the sample file to your computer.
 
 ```sh
-curl -o $HOME/.laptop.local https://https://raw.githubusercontent.com/massimoksi/laptop/master/laptop.local
+curl -o $HOME/.laptop.local https://raw.githubusercontent.com/massimoksi/laptop/master/laptop.local
 ```
 
 Write your customizations such that they can be run safely more than once.
