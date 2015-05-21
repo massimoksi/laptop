@@ -1,0 +1,14 @@
+#!/bin/sh
+
+brew_install_or_upgrade 'git-flow'
+brew_install_or_upgrade 'hub'
+brew_install_or_upgrade 'git-extras'
+brew_install_or_upgrade 'carthage'
+brew_install_or_upgrade 'cloc'
+brew_install_or_upgrade 'uncrustify'
+brew_install_or_upgrade 'ffmpeg'
+
+brew cleanup -s
+
+gem_install_or_update 'cocoapods'
+gem_install_or_update 'jazzy'
