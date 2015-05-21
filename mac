@@ -106,7 +106,7 @@ brew cleanup -s
 
 eval "$(rbenv init - )"
 
-ruby_version="$(curl -sSL http://ruby.thoughtbot.com/latest)"
+ruby_version="$(curl -sSL https://raw.githubusercontent.com/massimoksi/laptop/master/latest)"
 if ! rbenv versions | grep -Fq "$ruby_version"; then
     rbenv install -s "$ruby_version"
 fi
