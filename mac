@@ -45,29 +45,29 @@ brew_expand_alias() {
     brew info "$1" 2>/dev/null | head -1 | awk '{gsub(/:/, ""); print $1}'
 }
 
-# brew_launchctl_restart() {
-#     local name="$(brew_expand_alias "$1")"
-#     local domain="homebrew.mxcl.$name"
-#     local plist="$domain.plist"
-#
-#     fancy_echo "Restarting %s ..." "$1"
-#     mkdir -p "$HOME/Library/LaunchAgents"
-#     ln -sfv "/usr/local/opt/$name/$plist" "$HOME/Library/LaunchAgents"
-#
-#     if launchctl list | grep -Fq "$domain"; then
-#         launchctl unload "$HOME/Library/LaunchAgents/$plist" >/dev/null
-#     fi
-#     launchctl load "$HOME/Library/LaunchAgents/$plist" >/dev/null
-# }
-
 gem_install_or_update() {
     if gem list "$1" --installed > /dev/null; then
         fancy_echo "Updating %s ..." "$1"
-        gem update "$@"
+        gem update --quiet "$@"
     else
         fancy_echo "Installing %s ..." "$1"
-        gem install --no-ri --no-rdoc "$@"
-        rbenv rehash
+        gem install --no-ri --no-rdoc --quiet "$@"
+    fi
+}
+
+run_shell_script() {
+    if [ -f $1 ]; then
+        CUR_PATH=$CWD
+        CMD_PATH=${1%/*}
+        CMD_NAME=${1##*/}
+
+        cd $CMD_PATH
+        fancy_echo "Running %s ..." "$1"
+        . "$CMD_NAME"
+
+        cd $CUR_PATH
+    else
+        fancy_echo "%s not found. Skipping ..." "$1"
     fi
 }
 
@@ -86,38 +86,27 @@ fi
 fancy_echo "Updating Homebrew formulas ..."
 brew update
 
-brew_install_or_upgrade 'git'
-brew_install_or_upgrade 'bash-completion'
-#brew_install_or_upgrade 'rbenv'
-#brew_install_or_upgrade 'ruby-build'
-brew_tap 'homebrew/services'
-
-###############################################################################
-# Rbenv
-#
-#eval "$(rbenv init - )"
-#
-#ruby_version="$(curl -sSL https://raw.githubusercontent.com/massimoksi/laptop/master/latest)"
-#if ! rbenv versions | grep -Fq "$ruby_version"; then
-#    rbenv install -s "$ruby_version"
-#fi
-#rbenv global "$ruby_version"
-#rbenv shell "$ruby_version"
-
 ###############################################################################
 # Rubygems
 
 gem update --system
 
-gem_install_or_update 'bundler'
+###############################################################################
+# Configuration files
 
-fancy_echo "Configuring Bundler ..."
-number_of_cores=$(sysctl -n hw.ncpu)
-bundle config --global jobs $((number_of_cores - 1))
+CONF_PATH=$HOME/.laptop
+if [ -d $CONF_PATH ]; then
+    for f in $CONF_PATH/*.laptop; do
+        fancy_echo " ->  ${f##*/}"
+        . "$f"
+    done
+else
+    mkdir $CONF_PATH
+    fancy_echo "Please create your laptop files in .laptop/."
+fi
 
 ###############################################################################
-# Local
+# Clean up
 
-if [ -f "$HOME/.laptop.local" ]; then
-    . "$HOME/.laptop.local"
-fi
+brew cleanup -s
+gem cleanup

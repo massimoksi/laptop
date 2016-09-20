@@ -9,8 +9,9 @@ It installs, upgrades, or skips packages based on what is already installed on t
 
 Laptop has been tested on:
 
-* [OS X Mavericks (10.9)](https://itunes.apple.com/us/app/os-x-mavericks/id675248567)
-* [OS X Yosemite (10.10)](https://www.apple.com/osx/)
+* OS X Mavericks (10.9)
+* OS X Yosemite (10.10)
+* OS X El Capitan (10.11)
 
 Older versions may work but aren't regularly tested. Bug reports for older versions are welcome.
 
@@ -31,41 +32,21 @@ Read through it to see if you can debug the issue yourself.
 If not, copy the lines where the script failed into a [new GitHub Issue](https://github.com/massimoksi/laptop/issues/new) for me.
 Or, attach the whole log file as an attachment.
 
-## What it sets up
+## Create your laptop files
 
-* [Homebrew] for managing operating system libraries
-* [Git] for version control
-* [Bash completion] for fast typing on Terminal
-* [Rbenv] for managing versions of Ruby
-* [Ruby Build] for installing Rubies
-* [Ruby] stable for writing general-purpose code
-* [Bundler] for managing Ruby libraries
-
-[Homebrew]: http://brew.sh/
-[Git]: https://git-scm.com/
-[Bash completion]: https://bash-completion.alioth.debian.org/
-[Rbenv]: https://github.com/sstephenson/rbenv
-[Ruby Build]: https://github.com/sstephenson/ruby-build
-[Ruby]: https://www.ruby-lang.org/en/
-[Bundler]: http://bundler.io/
-
-It should take less than 15 minutes to install (depends on your machine).
-
-## Customize in `~/.laptop.local`
-
-Your `~/.laptop.local` is run at the end of the Laptop script.
-Put your customizations there.
-This repo already contains a `.laptop.local` you can use to get started.
+At the end of the script, Laptop looks for configuration files inside your `~/.laptop` directory.
+Put your customizations there in files with a `laptop` extension.
+This repo already contains a `demo.laptop` you can use to get started.
 
 Download the sample file to your computer.
 
 ```sh
-curl -o $HOME/.laptop.local https://raw.githubusercontent.com/massimoksi/laptop/master/laptop.local
+curl -o $HOME/.laptop/demo.laptop https://raw.githubusercontent.com/massimoksi/laptop/master/demo.laptop
 ```
 
 Write your customizations such that they can be run safely more than once.
 Laptop functions such as `fancy_echo`, `brew_install_or_upgrade`, and `gem_install_or_update`
-can be used in your `~/.laptop.local`.
+can be used.
 See the [wiki](https://github.com/thoughtbot/laptop/wiki) for more customization examples.
 
 For example:
@@ -80,8 +61,6 @@ brew_install_or_upgrade 'carthage'
 brew_install_or_upgrade 'cloc'
 brew_install_or_upgrade 'uncrustify'
 brew_install_or_upgrade 'ffmpeg'
-
-brew cleanup -s
 
 gem_install_or_update 'cocoapods'
 gem_install_or_update 'jazzy'
